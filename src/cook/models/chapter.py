@@ -37,6 +37,7 @@ class Chapter:
 
 
 def load_chapters_from_api(doc_id, base_url=cfg.API_URL) -> tuple[list[Chapter], str]:
+    print('load_chapters_from_api in')
     url = f"{base_url}/lesson/get_chatper_info"
     params = {"doc_id": doc_id}
 
@@ -52,14 +53,16 @@ def load_chapters_from_api(doc_id, base_url=cfg.API_URL) -> tuple[list[Chapter],
         if data["data"]:
             coures_id = data["data"]["course_id"]
             for item in data["data"]["lesson_list"]:
+                print('item in')
                 print(item)
+                print('item out')
                 chapters.append(
                     Chapter(
                         id=item["lesson_no"],
                         name=item["lesson_name"],
                         lesson_id=item["lesson_id"],
                         lark_table_id=item["feishu_id"],
-                        lark_view_id=cfg.DEF_LARK_VIEW_ID,
+                        lark_view_id=item["lark_view_id"] or cfg.DEF_LARK_VIEW_ID,
                         rank=int(item["lesson_no"]),
                         chapter_type=item["lesson_type"],
                     )

@@ -25,21 +25,35 @@ from lark_oapi.api.bitable.v1 import (
 
 
 _ = load_dotenv(find_dotenv())
+IS_LARK = os.environ.get("IS_LARK")
 LARK_APP_ID = os.environ.get("LARK_APP_ID")
 LARK_APP_SECRET = os.environ.get("LARK_APP_SECRET")
+
+
 
 
 def get_lark_client() -> lark.Client:
     """获取 飞书 client 对象
     :return: client
     """
-    client = (
-        lark.Client.builder()
-        .app_id(LARK_APP_ID)
-        .app_secret(LARK_APP_SECRET)
-        .log_level(lark.LogLevel.DEBUG)
-        .build()
-    )
+    if not IS_LARK:
+        client = (
+            lark.Client.builder()
+            .app_id(LARK_APP_ID)
+            .app_secret(LARK_APP_SECRET)
+            .log_level(lark.LogLevel.DEBUG)
+            .build()
+        )
+    else:
+        print("create lark client")
+        client = (
+            lark.Client.builder()
+            .app_id(LARK_APP_ID)
+            .app_secret(LARK_APP_SECRET)
+            .domain(lark.LARK_DOMAIN)
+            .log_level(lark.LogLevel.DEBUG)
+            .build()
+        )
     return client
 
 

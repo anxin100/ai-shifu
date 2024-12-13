@@ -57,4 +57,5 @@ llm:
     default_temperature: 0.8  # [0, 2)
 
 lark:
-  default_view_id: vewlGkI2Jp  # all lark bitable's default view id
+#  default_view_id: vewlGkI2Jp  # all lark bitable's default view id
+  default_view_id: vewapHWhJs  # all lark bitable's default view id

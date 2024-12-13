@@ -82,6 +82,9 @@ class AILesson(db.Model):
     lesson_feishu_id = Column(
         String(255), nullable=False, default="", comment="Lesson feishu ID"
     )
+    lark_view_id = Column(
+        String(255), nullable=False, default="", comment="Lark view ID"
+    )
     lesson_status = Column(Integer, nullable=False, default=0, comment="Lesson status")
     lesson_type = Column(Integer, nullable=False, default=0, comment="Lesson type")
     lesson_summary = Column(Text, nullable=False, default="", comment="Lesson summary")

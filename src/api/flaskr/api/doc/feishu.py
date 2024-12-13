@@ -9,7 +9,7 @@ from flaskr.common.config import get_config
 # feishu api
 # ref: https://open.feishu.cn/document/server-docs/docs/docs-overview
 
-
+LARK_DOMAIN = get_config("LARK_DOMAIN")
 APPID = get_config("LARK_APP_ID")
 APP_SECRET = get_config("LARK_APP_SECRET")
 FOLDER_ID = "QSN2fIQWqlubNxdHHoJcSbVknVh"
@@ -25,7 +25,7 @@ def get_tenat_token(app: Flask, app_id=APPID, app_secrect=APP_SECRET):
     if token:
         app.logger.info("get_tenat_token:" + str(token, encoding="utf-8"))
         return str(token, encoding="utf-8")
-    url = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal/"
+    url = f"{LARK_DOMAIN}/open-apis/auth/v3/tenant_access_token/internal/"
     headers = {"Content-Type": "application/json"}
     data = {"app_id": app_id, "app_secret": app_secrect}
     r = requests.post(url, headers=headers, data=json.dumps(data))
@@ -40,7 +40,7 @@ def get_tenat_token(app: Flask, app_id=APPID, app_secrect=APP_SECRET):
 def create_document(app: Flask, title: str):
 
     token = get_tenat_token(app)
-    url = "https://open.feishu.cn/open-apis/docx/v1/documents"
+    url = f"{LARK_DOMAIN}/open-apis/docx/v1/documents"
     headers = {"Content-Type": "application/json", "Authorization": "Bearer " + token}
     data = {
         "folder_token": FOLDER_ID,
@@ -55,7 +55,8 @@ def create_document(app: Flask, title: str):
 
 def update_document_to_public(app: Flask, doc_id: str):
     token = get_tenat_token(app)
-    url = "https://open.feishu.cn/open-apis/drive/v2/permissions/{doc_id}/public?type=docx".format(
+    url = "{domain}/open-apis/drive/v2/permissions/{doc_id}/public?type=docx".format(
+        domain=LARK_DOMAIN,
         doc_id=doc_id
     )
     headers = {"Content-Type": "application/json", "Authorization": "Bearer " + token}
@@ -72,7 +73,8 @@ def update_document_to_public(app: Flask, doc_id: str):
 
 def add_text_element(app: Flask, doc_id: str, user_name: str, text: str):
     token = get_tenat_token(app)
-    url = "https://open.feishu.cn/open-apis/docx/v1/documents/{doc_id}/blocks/{doc_id}/children".format(
+    url = "{domain}/open-apis/docx/v1/documents/{doc_id}/blocks/{doc_id}/children".format(
+        domain=LARK_DOMAIN,
         doc_id=doc_id
     )
     app.logger.info("add_text_element:" + url)
@@ -110,8 +112,8 @@ def add_text_element(app: Flask, doc_id: str, user_name: str, text: str):
 def remove_text_element(app: Flask, doc_id: str, block_id: str):
     token = get_tenat_token(app)
 
-    url = "https://open.feishu.cn/open-apis/docx/v1/documents/{document_id}/blocks/{block_id}".format(
-        document_id=doc_id, block_id=doc_id
+    url = "{domain}/open-apis/docx/v1/documents/{document_id}/blocks/{block_id}".format(
+        domain=LARK_DOMAIN,document_id=doc_id, block_id=doc_id
     )
     app.logger.info("get_txt_element:" + url)
     headers = {"Content-Type": "application/json", "Authorization": "Bearer " + token}
@@ -120,8 +122,8 @@ def remove_text_element(app: Flask, doc_id: str, block_id: str):
     blocks = r.json()["data"]["block"]["children"]
 
     index = blocks.index(block_id)
-    url = "https://open.feishu.cn/open-apis/docx/v1/documents/{doc_id}/blocks/{block_id}/children/batch_delete".format(
-        doc_id=doc_id, block_id=doc_id
+    url = "{domain}/open-apis/docx/v1/documents/{doc_id}/blocks/{block_id}/children/batch_delete".format(
+        domain=LARK_DOMAIN,doc_id=doc_id, block_id=doc_id
     )
     app.logger.info("remove_text_element:" + url)
     headers = {"Content-Type": "application/json", "Authorization": "Bearer " + token}
@@ -148,8 +150,8 @@ def remove_text_element(app: Flask, doc_id: str, block_id: str):
 
 def get_document_info(app: Flask, doc_id: str, block_id: str):
     token = get_tenat_token(app)
-    url = "https://open.feishu.cn/open-apis/bitable/v1/apps/{app_token}/tables".format(
-        app_token=doc_id
+    url = "{domain}/open-apis/bitable/v1/apps/{app_token}/tables".format(
+        domain=LARK_DOMAIN,app_token=doc_id
     )
     app.logger.info("get_txt_element:" + url)
     headers = {"Content-Type": "application/json", "Authorization": "Bearer " + token}
@@ -161,8 +163,8 @@ def get_document_info(app: Flask, doc_id: str, block_id: str):
 def list_views(app: Flask, app_token: str, table_id: str):
     token = get_tenat_token(app)
     # https://open.feishu.cn/open-apis/bitable/v1/apps/:app_token/tables/:table_id/views
-    url = "https://open.feishu.cn/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views".format(
-        app_token=app_token, table_id=table_id
+    url = "{domain}/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/views".format(
+        domain=LARK_DOMAIN,app_token=app_token, table_id=table_id
     )
     app.logger.info("list_views:" + url)
     headers = {"Content-Type": "application/json", "Authorization": "Bearer " + token}
@@ -183,8 +185,8 @@ def list_records(
 ):
     token = get_tenat_token(app, app_id=app_id, app_secrect=app_secrect)
     # https://open.feishu.cn/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/search
-    url = "https://open.feishu.cn/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/search".format(
-        app_token=app_token, table_id=table_id
+    url = "{domain}/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/search".format(
+        domain=LARK_DOMAIN,app_token=app_token, table_id=table_id
     )
     query = {}
     if page_token:
@@ -213,8 +215,8 @@ def list_records(
 
 def list_tables(app: Flask, app_token: str):
     token = get_tenat_token(app)
-    url = "https://open.feishu.cn/open-apis/bitable/v1/apps/{app_token}/tables".format(
-        app_token=app_token
+    url = "{domain}/open-apis/bitable/v1/apps/{app_token}/tables".format(
+        domain=LARK_DOMAIN,app_token=app_token
     )
     headers = {"Content-Type": "application/json", "Authorization": "Bearer " + token}
     r = requests.get(url, headers=headers)

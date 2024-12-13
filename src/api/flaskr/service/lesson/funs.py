@@ -63,6 +63,7 @@ class AILessonDTO:
         lesson_no,
         lesson_index,
         lesson_feishu_id,
+        lark_view_id,
         lesson_status,
         status,
     ):
@@ -73,6 +74,7 @@ class AILessonDTO:
         self.lesson_no = lesson_no
         self.lesson_index = lesson_index
         self.lesson_feishu_id = lesson_feishu_id
+        self.lark_view_id = lark_view_id
         self.lesson_status = lesson_status
         self.status = status
 
@@ -85,12 +87,14 @@ class AILessonInfoDTO:
         lesson_name: str,
         lesson_id: str,
         feishu_id: str,
+        lark_view_id:str,
         lesson_type,
     ) -> None:
         self.lesson_no = lesson_no
         self.lesson_name = lesson_name
         self.lesson_id = lesson_id
         self.feishu_id = feishu_id
+        self.lark_view_id = lark_view_id
         self.lesson_type = lesson_type
 
     def __json__(self):
@@ -99,6 +103,7 @@ class AILessonInfoDTO:
             "lesson_name": self.lesson_name,
             "lesson_id": self.lesson_id,
             "feishu_id": self.feishu_id,
+            "lark_view_id": self.lark_view_id,
             "lesson_type": self.lesson_type,
         }
 
@@ -148,6 +153,7 @@ class AILessonDetailDTO:
         lesson_no: str,
         lesson_index: int,
         lesson_feishu_id: str,
+        lark_view_id:str,
         lesson_status: int,
         status: int,
         lesson_type: int,
@@ -169,6 +175,7 @@ class AILessonDetailDTO:
         self.lesson_no = lesson_no
         self.lesson_index = lesson_index
         self.lesson_feishu_id = lesson_feishu_id
+        self.lark_view_id = lark_view_id
         self.lesson_status = lesson_status
         self.status = status
         self.lesson_type = lesson_type
@@ -192,6 +199,7 @@ class AILessonDetailDTO:
             "lesson_no": self.lesson_no,
             "lesson_index": self.lesson_index,
             "lesson_feishu_id": self.lesson_feishu_id,
+            "lark_view_id": self.lark_view_id,
             "lesson_status": self.lesson_status,
             "status": self.status,
             "lesson_type": self.lesson_type,
@@ -294,7 +302,7 @@ def update_lesson_info(
     doc_id: str,
     table_id: str,
     view_id: str,
-    title: str = "vewlGkI2Jp",
+    title: str = "",
     index: int = None,
     lesson_type: int = LESSON_TYPE_NORMAL,
     app_id: str = None,
@@ -349,6 +357,7 @@ def update_lesson_info(
             parent_lesson.status = 1
             parent_lesson.lesson_no = lessonNo
             parent_lesson.lesson_feishu_id = table_id
+            parent_lesson.lark_view_id = view_id
             parent_lesson.lesson_type = lesson_type
             if int(index) > 1:
                 parent_lesson.pre_lesson_no = str(int(index) - 1).zfill(2)
@@ -362,6 +371,7 @@ def update_lesson_info(
             parent_lesson.lesson_no = lessonNo
             parent_lesson.status = 1
             parent_lesson.lesson_feishu_id = table_id
+            parent_lesson.lark_view_id = view_id
             parent_lesson.lesson_type = lesson_type
             if int(index) > 1:
                 parent_lesson.pre_lesson_no = str(int(index) - 1).zfill(2)
@@ -431,6 +441,7 @@ def update_lesson_info(
                         lesson.lesson_desc = ""
                         lesson.status = 1
                         lesson.lesson_feishu_id = table_id
+                        parent_lesson.lark_view_id = view_id
                         lesson.lesson_no = lessonNo + str(subIndex).zfill(2)
                         lesson.lesson_type = lesson_type
                         if subIndex > 1:
@@ -443,6 +454,7 @@ def update_lesson_info(
                         lesson.lesson_desc = ""
                         lesson.status = 1
                         lesson.lesson_feishu_id = table_id
+                        parent_lesson.lark_view_id = view_id
                         lesson.lesson_type = lesson_type
                         lesson.lesson_no = lessonNo + str(subIndex).zfill(2)
                         if subIndex > 1:
@@ -564,6 +576,7 @@ def get_lessons(app: Flask, feshu_doc_id) -> AICourseDetailDTO:
                 lesson.lesson_name,
                 lesson.lesson_id,
                 lesson.lesson_feishu_id,
+                lesson.lark_view_id,
                 lesson.lesson_type,
             )
             lessonInfos.append(lessonInfo)
@@ -591,6 +604,7 @@ def get_lesson_detail(app: Flask, lesson_id: str) -> AILessonDetailDTO:
             lesson.lesson_no,
             lesson.lesson_index,
             lesson.lesson_feishu_id,
+            lesson.lark_view_id,
             lesson.lesson_status,
             lesson.status,
             lesson.lesson_type,
