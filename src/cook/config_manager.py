@@ -83,7 +83,7 @@ class ConfigManager:
 
             self.COOK_CONN_STR = (
                 f'mysql+pymysql://{os.getenv("COOK_DB_USERNAME")}:{os.getenv("COOK_DB_PASSWORD")}'
-                f'@{os.getenv("COOK_DB_HOST")}:3306/{os.getenv("COOK_DB_DATABASE")}'
+                f'@{os.getenv("COOK_DB_HOST")}:{os.getenv("COOK_DB_PORT")}/{os.getenv("COOK_DB_DATABASE")}'
             )
 
         # Add logging configuration
