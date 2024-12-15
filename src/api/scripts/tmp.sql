@@ -167,6 +167,7 @@ CREATE TABLE `ai_lesson` (
   `lesson_sale_type` int NOT NULL DEFAULT '0' COMMENT '0 默认 1 体验课 2 系统课 3 扩展课',
   `lesson_type` int NOT NULL DEFAULT '0' COMMENT '0 默认 1 体验课 2 系统课 3 扩展课',
   `lesson_feishu_id` varchar(255) NOT NULL DEFAULT '' COMMENT 'Lesson feishu ID',
+  `lark_view_id` varchar(255) NOT NULL DEFAULT '' COMMENT 'Lark view ID',
   `lesson_status` int NOT NULL DEFAULT '0' COMMENT 'Lesson status',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation time',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
