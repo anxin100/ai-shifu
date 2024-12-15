@@ -447,6 +447,12 @@ def upgrade():
             comment="Lesson feishu ID",
         ),
         sa.Column(
+            "lark_view_id",
+            sa.String(length=255),
+            nullable=False,
+            comment="Lark view ID",
+        ),
+        sa.Column(
             "lesson_status", sa.Integer(), nullable=False, comment="Lesson status"
         ),
         sa.Column("lesson_type", sa.Integer(), nullable=False, comment="Lesson type"),
